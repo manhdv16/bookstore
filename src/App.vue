@@ -17,7 +17,7 @@ export default {
   },
   data() {
     return {
-      baseURL: "bebookstore-production.up.railway.app/",
+      baseURL: "https://bebookstore-production.up.railway.app/",
       books: null,
       categories: null,
     };
