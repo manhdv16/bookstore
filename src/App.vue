@@ -24,6 +24,7 @@ export default {
   },
   methods: {
     fetchData() {
+      console.log("this.baseURL", this.baseURL);
       axios
         .get(`${this.baseURL}api/v1/books`)
         .then((res) => {
