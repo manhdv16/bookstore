@@ -82,6 +82,15 @@
           >
             Save
           </button>
+
+          <button
+            v-if="!isEdit"
+            type="button"
+            class="btn btn-primary"
+            @click="handleChangePassword"
+          >
+            Change password
+          </button>
         </form>
       </div>
       <div class="col-3"></div>
@@ -159,6 +168,9 @@ export default {
         .catch((err) => {
           console.log(err);
         });
+    },
+    handleChangePassword() {
+      this.$router.push({ name: "ChangePassword" });
     },
   },
   mounted() {
