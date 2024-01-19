@@ -4,7 +4,7 @@ import Login from "../views/Navbar/login.vue";
 import Register from "../views/Navbar/register.vue";
 import PageNotFound from "../views/Navbar/PageNotFound.vue";
 import Profile from "../views/Navbar/Profile.vue";
-import ChangePassword from "/..views/Navbar/ChangePassword.vue";
+import ChangePassword from "../views/Navbar/ChangePassword.vue";
 
 import Admin from "../views/Admin/Admin.vue";
 import Book from "../views/Book/Book.vue";
