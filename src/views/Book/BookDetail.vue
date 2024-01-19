@@ -111,7 +111,6 @@ export default {
       reviews: null,
     };
   },
-  props: ["baseURL"],
   methods: {
     addToCart(bookId) {
       if (!this.token) {
@@ -127,7 +126,7 @@ export default {
         quantity: this.quantity,
       };
       axios
-        .post(`${this.baseURL}api/v1/addToCart`, newCart, {
+        .post(`${this.$store.state.baseURL}api/v1/addToCart`, newCart, {
           headers: {
             Authorization: `Bearer ${this.token}`,
             "Content-Type": "application/json",
@@ -154,7 +153,7 @@ export default {
         this.$router.push({ name: "Signin" });
       } else {
         axios
-          .get(`${this.baseURL}api/v1/viewCart`, {
+          .get(`${this.$store.state.baseURL}api/v1/viewCart`, {
             headers: {
               Authorization: `Bearer ${this.token}`,
             },
@@ -166,7 +165,7 @@ export default {
     },
     listComments(id) {
       axios
-        .get(`${this.baseURL}api/v1/searchCommentByBook/${id}`)
+        .get(`${this.$store.state.baseURL}api/v1/searchCommentByBook/${id}`)
         .then((res) => {
           this.reviews = res.data;
         })

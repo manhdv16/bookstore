@@ -55,7 +55,7 @@
 import axios from "axios";
 export default {
   name: "BookBox",
-  props: ["book", "baseURL"],
+  props: ["book"],
   methods: {
     showDetails() {
       this.$router.push({
@@ -69,7 +69,7 @@ export default {
       );
       if (confirm) {
         axios
-          .delete(`http://localhost:8088/api/v1/deleteBook/${bookId}`, {
+          .delete(`${this.$store.state.baseURL}api/v1/deleteBook/${bookId}`, {
             headers: {
               Authorization: `Bearer ${localStorage.getItem("token")}`,
             },

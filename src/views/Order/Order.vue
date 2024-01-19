@@ -75,13 +75,12 @@ export default {
       orderList: [],
     };
   },
-  props: ["baseURL"],
   name: "Order",
   methods: {
     // list of order histories
     listOrders() {
       axios
-        .get(`${this.baseURL}api/v1/orders`, {
+        .get(`${this.$store.state.baseURL}api/v1/orders`, {
           headers: {
             Authorization: `Bearer ${this.token}`,
           },

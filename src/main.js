@@ -10,7 +10,7 @@ const store = new Vuex.Store({
   state: {
     token: null,
     roles: null,
-    baseURL: "http://localhost:8088/",
+    baseURL: "https://bebookstore-production.up.railway.app/",
     books: [],
     categories: [],
     cartItems: [],
@@ -61,19 +61,17 @@ const store = new Vuex.Store({
   actions: {
     fetchData({ commit }) {
       axios
-        .get("http://localhost:8088/api/v1/categories")
+        .get("https://bebookstore-production.up.railway.app/api/v1/categories")
         .then((res) => {
           commit("setCategories", res.data);
-          console.log(res.status);
         })
         .catch((err) => {
           console.log("get category error", err);
         });
       axios
-        .get("http://localhost:8088/api/v1/books")
+        .get("https://bebookstore-production.up.railway.app/api/v1/books")
         .then((res) => {
           commit("setBooks", res.data);
-          console.log(res.status);
         })
         .catch((err) => {
           console.log("get books error", err);

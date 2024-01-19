@@ -121,7 +121,6 @@ export default {
       pageSize: 3,
     };
   },
-  props: ["baseURL"],
   name: "Order",
   computed: {
     ...mapState(["listOrders"]),
@@ -147,7 +146,7 @@ export default {
     // list of order histories
     getListOrders() {
       axios
-        .get(`${this.baseURL}api/v1/adminOrder`, {
+        .get(`${this.$store.state.baseURL}api/v1/adminOrder`, {
           headers: {
             Authorization: `Bearer ${this.token}`,
           },
@@ -181,14 +180,18 @@ export default {
     },
     setStatus(orderId, status) {
       axios
-        .put(`${this.baseURL}api/v1/updateOrder/${orderId}`, null, {
-          headers: {
-            Authorization: `Bearer ${this.token}`,
-          },
-          params: {
-            status: status,
-          },
-        })
+        .put(
+          `${this.$store.state.baseURL}api/v1/updateOrder/${orderId}`,
+          null,
+          {
+            headers: {
+              Authorization: `Bearer ${this.token}`,
+            },
+            params: {
+              status: status,
+            },
+          }
+        )
         .then((res) => {
           console.log(res.status);
         })
@@ -202,7 +205,7 @@ export default {
       );
       if (confirm) {
         axios
-          .delete(`${this.baseURL}api/v1/deleteOrder/${orderId}`, {
+          .delete(`${this.$store.state.baseURL}api/v1/deleteOrder/${orderId}`, {
             headers: {
               Authorization: `Bearer ${this.token}`,
             },

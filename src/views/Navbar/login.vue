@@ -96,7 +96,7 @@ export default {
         password: this.password,
       };
       axios
-        .post("http://localhost:8088/api/v1/signin", userData)
+        .post(`${this.$store.state.baseURL}api/v1/signin`, userData)
         .then((res) => {
           console.log("userForm: ", res.data);
           this.$store.commit("setToken", {

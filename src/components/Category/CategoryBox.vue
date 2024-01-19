@@ -37,7 +37,7 @@ export default {
       );
       if (confirm) {
         axios
-          .delete(`http://localhost:8088/api/v1/deleteCategory/${id}`)
+          .delete(`${this.$store.state.baseURL}api/v1/deleteCategory/${id}`)
           .then((res) => {
             this.$store.dispatch("fetchData");
             console.log(res.status);

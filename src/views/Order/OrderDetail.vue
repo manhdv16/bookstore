@@ -73,7 +73,6 @@
 import axios from "axios";
 export default {
   name: "OrderItems",
-  props: ["baseURL"],
 
   data() {
     return {
@@ -87,7 +86,7 @@ export default {
   methods: {
     getListOrderDetail() {
       axios
-        .get(`${this.baseURL}api/v1/order/${this.orderId}`, {
+        .get(`${this.$store.state.baseURL}api/v1/order/${this.orderId}`, {
           headers: {
             Authorization: `Bearer ${this.token}`,
           },

@@ -8,12 +8,6 @@
     </div>
 
     <div class="row">
-      <!-- <img
-        v-show="len == 0"
-        class="img-fluid"
-        src="../../assets/sorry.jpg"
-        alt="Sorry"
-      /> -->
       <div
         v-for="book of category.books"
         :key="book.bookId"
@@ -39,7 +33,6 @@ export default {
     };
   },
   components: { BookBox },
-  props: ["baseURL"],
   mounted() {
     this.id = this.$route.params.id;
     this.categories = this.$store.state.categories;

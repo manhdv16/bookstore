@@ -24,7 +24,6 @@ export default {
   },
   methods: {
     fetchData() {
-      console.log("this.baseURL", this.baseURL);
       axios
         .get(`${this.baseURL}api/v1/books`)
         .then((res) => {
@@ -39,7 +38,7 @@ export default {
         });
 
       axios
-        .get(this.baseURL + "api/v1/categories")
+        .get(`${this.baseURL}api/v1/categories`)
         .then((res) => {
           this.categories = res.data;
           this.$store.commit("setCategories", res.data);

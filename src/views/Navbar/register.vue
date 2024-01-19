@@ -86,7 +86,6 @@ export default {
       phoneNumber: "",
     };
   },
-  props: ["baseURL"],
   methods: {
     handleRegister() {
       const userData = {
@@ -98,7 +97,7 @@ export default {
       };
 
       axios
-        .post(`${this.baseURL}api/v1/signup`, userData)
+        .post(`${this.$store.state.baseURL}api/v1/signup`, userData)
         .then((res) => {
           console.log(res.data);
           alert("Đăng ký thành công !");

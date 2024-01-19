@@ -54,7 +54,6 @@ export default {
       comment: "",
     };
   },
-  props: ["baseURL"],
   methods: {
     selectRating(star) {
       this.ratedStars = star;
@@ -66,9 +65,6 @@ export default {
       this.hoverStars = 0;
     },
     submitReview() {
-      console.log(
-        `Đã đánh giá ${this.ratedStars} sao. Bình luận: ${this.comment}`
-      );
       const form = {
         rating: this.ratedStars,
         content: this.comment,
@@ -76,7 +72,7 @@ export default {
       };
       console.log(form);
       axios
-        .post(`${this.baseURL}api/v1/addComment`, form, {
+        .post(`${this.$store.state.baseURL}api/v1/addComment`, form, {
           headers: {
             Authorization: `Bearer ${this.token}`,
           },

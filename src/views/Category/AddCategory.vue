@@ -62,7 +62,6 @@ export default {
       token: null,
     };
   },
-  props: ["baseURL"],
   methods: {
     async addCategory() {
       const newCategory = {
@@ -70,7 +69,7 @@ export default {
         description: this.description,
       };
       await axios
-        .post(this.baseURL + "api/v1/addCategory", newCategory, {
+        .post(`${this.$store.state.baseURL}api/v1/addCategory`, newCategory, {
           headers: {
             Authorization: `Bearer ${this.token}`,
           },

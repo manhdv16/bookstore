@@ -55,7 +55,6 @@ export default {
       category: null,
     };
   },
-  props: ["baseURL"],
   methods: {
     editCategory() {
       const dataForm = new FormData();
@@ -65,11 +64,15 @@ export default {
         dataForm.append("description", this.description);
 
       axios
-        .put(`${this.baseURL}api/v1/updateCategory/${this.id}`, dataForm, {
-          headers: {
-            Authorization: `Bearer ${this.token}`,
-          },
-        })
+        .put(
+          `${this.$store.state.baseURL}api/v1/updateCategory/${this.id}`,
+          dataForm,
+          {
+            headers: {
+              Authorization: `Bearer ${this.token}`,
+            },
+          }
+        )
         .then((res) => {
           console.log(res.status);
           this.$store.dispatch("fetchData");

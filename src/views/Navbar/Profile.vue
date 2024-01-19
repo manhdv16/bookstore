@@ -104,11 +104,10 @@ export default {
       isEdit: false,
     };
   },
-  props: ["baseURL"],
   methods: {
     getInfor() {
       axios
-        .get(`${this.baseURL}api/v1/viewInfor`, {
+        .get(`${this.$store.state.baseURL}api/v1/viewInfor`, {
           headers: {
             Authorization: `Bearer ${this.token}`,
           },
@@ -144,7 +143,7 @@ export default {
         data.append("address", this.address);
 
       axios
-        .put(`${this.baseURL}api/v1/updateInfor`, data, {
+        .put(`${this.$store.state.baseURL}api/v1/updateInfor`, data, {
           headers: {
             Authorization: `Bearer ${this.token}`,
           },

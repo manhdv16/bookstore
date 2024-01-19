@@ -117,11 +117,10 @@ export default {
     };
   },
   name: "Cart",
-  props: ["baseURL"],
   methods: {
     listCartItems() {
       axios
-        .get(`${this.baseURL}api/v1/viewCart`, {
+        .get(`${this.$store.state.baseURL}api/v1/viewCart`, {
           headers: {
             Authorization: `Bearer ${this.token}`,
           },
@@ -142,7 +141,7 @@ export default {
       };
       console.log(newOrder);
       axios
-        .post(`${this.baseURL}api/v1/addToOrder`, newOrder, {
+        .post(`${this.$store.state.baseURL}api/v1/addToOrder`, newOrder, {
           headers: {
             Authorization: `Bearer ${this.token}`,
           },
@@ -163,7 +162,7 @@ export default {
     },
     deleteItem(bookId) {
       axios
-        .delete(`${this.baseURL}api/v1/deleteCart/${bookId}`, {
+        .delete(`${this.$store.state.baseURL}api/v1/deleteCart/${bookId}`, {
           headers: {
             Authorization: `Bearer ${this.token}`,
           },

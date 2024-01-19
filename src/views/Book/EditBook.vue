@@ -115,7 +115,6 @@ export default {
       token: null,
     };
   },
-  props: ["baseURL"],
   methods: {
     handleFileChange(event) {
       const file = event.target.files[0];
@@ -147,7 +146,11 @@ export default {
         },
       };
       axios
-        .put(`${this.baseURL}api/v1/updateBook/${this.id}`, formData, config)
+        .put(
+          `${this.$store.state.baseURL}api/v1/updateBook/${this.id}`,
+          formData,
+          config
+        )
         .then(() => {
           this.$store.dispatch("fetchData");
           this.$router.push({ name: "AdminBook" });
