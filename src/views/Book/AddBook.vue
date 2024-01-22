@@ -118,7 +118,6 @@ export default {
       this.image = file;
     },
     addBook() {
-      console.log(this.token);
       const formData = new FormData();
       formData.append("categoryId", this.categoryId);
       formData.append("bookName", this.bookName);
@@ -142,7 +141,7 @@ export default {
           Swal.fire({
             text: "Book Added Successfully!",
             icon: "success",
-            allowOutsideClick: false,
+            allowOutsideClick: true,
           });
         })
         .catch(() => console.log("error when addbook"));
@@ -153,6 +152,18 @@ export default {
   },
   computed: {
     ...mapState(["categories"]),
+  },
+  beforeRouteEnter(to, from, next) {
+    let listRoles = [];
+    listRoles = localStorage.getItem("listRoles");
+    if (listRoles === null) {
+      next({ name: "Signin" });
+    } else if (
+      !listRoles.includes("ROLE_ADMIN") &&
+      !listRoles.includes("ROLE_MANAGER")
+    ) {
+      next({ name: "Home" });
+    }
   },
   mounted() {
     if (!localStorage.getItem("token")) {

@@ -177,10 +177,11 @@ export default {
     },
   },
   mounted() {
-    if (localStorage.getItem("token")) {
-      this.token = localStorage.getItem("token");
-      this.listCartItems();
+    if (!localStorage.getItem("token")) {
+      this.$router.replace({ name: "Signin" });
     }
+    this.token = localStorage.getItem("token");
+    this.listCartItems();
   },
   computed: {
     totalCost() {

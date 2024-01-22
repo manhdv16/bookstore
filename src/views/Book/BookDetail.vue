@@ -114,11 +114,6 @@ export default {
   methods: {
     addToCart(bookId) {
       if (!this.token) {
-        Swal.fire({
-          text: "Please log in first!",
-          icon: "error",
-          allowOutsideClick: true,
-        });
         this.$router.push({ name: "Signin" });
       }
       const newCart = {
@@ -145,11 +140,6 @@ export default {
     },
     listCartItems() {
       if (!this.token) {
-        Swal.fire({
-          text: "Please log in first!",
-          icon: "error",
-          allowOutsideClick: false,
-        });
         this.$router.push({ name: "Signin" });
       } else {
         axios

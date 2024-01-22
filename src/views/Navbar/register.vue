@@ -16,6 +16,9 @@
               required
               autocomplete="current-username"
             />
+            <small v-if="!isFilled && username === ''" class="text-danger"
+              >Please enter username</small
+            >
           </div>
           <div class="form-group">
             <label for="password" class="float-left">Password</label>
@@ -28,6 +31,9 @@
               required
               autocomplete="current-password"
             />
+            <small v-if="!isFilled && password === ''" class="text-danger"
+              >Please enter password</small
+            >
           </div>
           <div class="form-group">
             <label for="phonenumber" class="float-left">Phone Number:</label>
@@ -39,6 +45,9 @@
               placeholder="Enter phone number"
               required
             />
+            <small v-if="!isFilled && phoneNumber === ''" class="text-danger"
+              >Please enter phone number</small
+            >
           </div>
           <div class="form-group">
             <label for="email" class="float-left">Email:</label>
@@ -50,6 +59,9 @@
               placeholder="abc@gmail.com"
               required
             />
+            <small v-if="!isFilled && email === ''" class="text-danger"
+              >Please enter email</small
+            >
           </div>
           <div class="form-group">
             <label for="address" class="float-left">Address:</label>
@@ -61,6 +73,9 @@
               placeholder="Enter address"
               required
             />
+            <small v-if="!isFilled && address === ''" class="text-danger"
+              >Please enter address</small
+            >
           </div>
           <button type="button" class="btn btn-primary" @click="goBack">
             Cancel
@@ -84,10 +99,15 @@ export default {
       email: "",
       address: "",
       phoneNumber: "",
+      isFilled: true,
     };
   },
   methods: {
     handleRegister() {
+      if (this.username === "") {
+        this.isFilled = false;
+        return;
+      }
       const userData = {
         userName: this.username,
         password: this.password,
@@ -100,12 +120,11 @@ export default {
         .post(`${this.$store.state.baseURL}api/v1/signup`, userData)
         .then((res) => {
           console.log(res.data);
-          alert("Đăng ký thành công !");
+          alert(res.data.message);
           this.$router.push("/login");
         })
-        .catch((error) => {
-          console.log(error);
-          alert("Lỗi đăng ký !");
+        .catch((err) => {
+          alert(err.response.data.message);
         });
     },
     goBack() {

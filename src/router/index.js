@@ -5,6 +5,8 @@ import Register from "../views/Navbar/register.vue";
 import PageNotFound from "../views/Navbar/PageNotFound.vue";
 import Profile from "../views/Navbar/Profile.vue";
 import ChangePassword from "../views/Navbar/ChangePassword.vue";
+import ForgotPassword from "../views/Navbar/ForgotPassword.vue";
+import CreateNewPass from "../views/Navbar/CreateNewPass.vue";
 
 import Admin from "../views/Admin/Admin.vue";
 import Book from "../views/Book/Book.vue";
@@ -46,6 +48,16 @@ const routes = [
     path: "/changepassword",
     name: "ChangePassword",
     component: ChangePassword,
+  },
+  {
+    path: "/forgotpassword",
+    name: "ForgotPassword",
+    component: ForgotPassword,
+  },
+  {
+    path: "/createnewpass",
+    name: "CreateNewPass",
+    component: CreateNewPass,
   },
 
   //Admin routes

@@ -2,7 +2,7 @@
   <navigations />
 
   <div style="min-height: 60vh">
-    <router-view v-if="books && categories" :baseURL="baseURL"> </router-view>
+    <router-view v-if="books && categories"> </router-view>
   </div>
 </template>
 
@@ -17,7 +17,8 @@ export default {
   },
   data() {
     return {
-      baseURL: "https://bebookstore-production.up.railway.app/",
+      // baseURL: "https://bebookstore-production.up.railway.app/",
+      baseURL: "http://localhost:8088/",
       books: null,
       categories: null,
     };

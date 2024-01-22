@@ -96,6 +96,13 @@ export default {
       this.$router.go(-1);
     },
   },
+  beforeRouteEnter(to, from, next) {
+    if (from.name === "Order") {
+      next();
+    } else {
+      next({ name: "Signin" });
+    }
+  },
   mounted() {
     this.orderId = this.$route.params.id;
     this.token = localStorage.getItem("token");

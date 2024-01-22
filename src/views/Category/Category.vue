@@ -43,8 +43,17 @@ export default {
     },
   },
   mounted() {
-    if (this.$route.name == "AdminCategory" && !localStorage.getItem("token")) {
-      this.$router.push({ name: "Signin" });
+    if (this.$route.name == "AdminCategory") {
+      const listRoles =
+        this.$store.state.roles || localStorage.getItem("listRoles");
+      if (listRoles === null) {
+        this.$router.replace({ name: "Signin" });
+      } else if (
+        !listRoles.includes("ROLE_ADMIN") &&
+        !listRoles.includes("ROLE_MANAGER")
+      ) {
+        this.$router.replace({ name: "Home" });
+      }
     }
   },
 };

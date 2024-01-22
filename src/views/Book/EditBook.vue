@@ -170,10 +170,19 @@ export default {
     ...mapState(["categories"]),
     ...mapState(["books"]),
   },
-  mounted() {
-    if (!localStorage.getItem("token")) {
-      this.$router.push({ name: "Signin" });
+  beforeRouteEnter(to, from, next) {
+    let listRoles = [];
+    listRoles = localStorage.getItem("listRoles");
+    if (listRoles === null) {
+      next({ name: "Signin" });
+    } else if (
+      !listRoles.includes("ROLE_ADMIN") &&
+      !listRoles.includes("ROLE_MANAGER")
+    ) {
+      next({ name: "Home" });
     }
+  },
+  mounted() {
     this.id = this.$route.params.id;
     this.book = this.books.find((book) => book.bookId == this.id);
 

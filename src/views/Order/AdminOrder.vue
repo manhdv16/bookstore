@@ -110,6 +110,7 @@
 </template>
 
 <script>
+import Swal from "sweetalert2";
 import { mapState } from "vuex";
 const axios = require("axios");
 export default {
@@ -151,52 +152,49 @@ export default {
             Authorization: `Bearer ${this.token}`,
           },
         })
-        .then(
-          (response) => {
-            if (response.status == 200) {
-              this.orders = response.data;
-              // for each order populate orderList
-              this.orderList = this.orders.map((order) => ({
-                id: order.orderId,
-                userName: order.user.userName,
-                address: order.user.address,
-                phoneNumber: order.user.phoneNumber,
-                totalCost: order.totalAmount,
-                orderDate: order.orderDate.substring(0, 10),
-                image: order.image,
-                totalBook: order.totalBook,
-                status: order.status,
-              }));
-              this.orderList = this.orderList.sort((a, b) => {
-                return new Date(b.orderDate) - new Date(a.orderDate);
-              });
-              this.$store.commit("setListOrders", this.orderList);
-            }
-          },
-          (error) => {
-            console.log(error);
-          }
-        );
+        .then((res) => {
+          this.orders = res.data;
+          // for each order populate orderList
+          this.orderList = this.orders.map((order) => ({
+            id: order.orderId,
+            userName: order.user.userName,
+            address: order.user.address,
+            phoneNumber: order.user.phoneNumber,
+            totalCost: order.totalAmount,
+            orderDate: order.orderDate.substring(0, 10),
+            image: order.image,
+            totalBook: order.totalBook,
+            status: order.status,
+          }));
+          this.orderList = this.orderList.sort((a, b) => {
+            return new Date(b.orderDate) - new Date(a.orderDate);
+          });
+          this.$store.commit("setListOrders", this.orderList);
+        })
+        .catch(() => {
+          console.log("get list error");
+        });
     },
     setStatus(orderId, status) {
       axios
         .put(
-          `${this.$store.state.baseURL}api/v1/updateOrder/${orderId}`,
+          `${this.$store.state.baseURL}api/v1/updateOrder/${orderId}?status=${status}`,
           null,
           {
             headers: {
               Authorization: `Bearer ${this.token}`,
             },
-            params: {
-              status: status,
-            },
           }
         )
-        .then((res) => {
-          console.log(res.status);
+        .then(() => {
+          Swal.fire({
+            text: "Update status successfully",
+            icon: "success",
+            allowOutsideClick: true,
+          });
         })
-        .catch((err) => {
-          console.log("err when set status", err);
+        .catch(() => {
+          console.log("err when set status");
         });
     },
     deleteOrder(orderId) {
@@ -211,7 +209,7 @@ export default {
             },
           })
           .then(() => {
-            this.listOrders();
+            this.getListOrders();
           })
           .catch((err) => {
             console.log("err when delete", err);
@@ -220,6 +218,8 @@ export default {
     },
   },
   mounted() {
+    const roles = this.$store.state.roles;
+    console.log(roles);
     this.token = localStorage.getItem("token");
     this.getListOrders();
   },

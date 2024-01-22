@@ -89,11 +89,11 @@ a {
   font-size: 24px;
   right: 10px;
   top: 10px;
-  cursor: pointer; /* Thêm dòng này để biểu thị rằng nút có thể được nhấp chuột */
-  transition: color 0.3s; /* Thêm hiệu ứng chuyển đổi màu khi rê chuột vào nút */
+  cursor: pointer;
+  transition: color 0.3s;
   z-index: 1;
 }
 .book-close:hover {
-  color: #f80303; /* Màu sẽ thay đổi khi rê chuột vào nút */
+  color: #f80303;
 }
 </style>

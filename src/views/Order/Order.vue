@@ -119,6 +119,9 @@ export default {
     },
   },
   mounted() {
+    if (!localStorage.getItem("token")) {
+      this.$router.push({ name: "Signin" });
+    }
     this.token = localStorage.getItem("token");
     this.listOrders();
   },

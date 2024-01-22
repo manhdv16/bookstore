@@ -106,6 +106,9 @@ export default {
   },
 
   mounted() {
+    if (!localStorage.getItem("token")) {
+      this.$router.push({ name: "Signin" });
+    }
     this.orderId = this.$route.params.id;
     this.token = localStorage.getItem("token");
     this.getListOrderDetail();

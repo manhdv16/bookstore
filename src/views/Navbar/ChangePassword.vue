@@ -12,32 +12,39 @@
         <form>
           <div class="form-group">
             <label>Old password</label>
-            <input type="password" class="form-control" />
+            <input type="password" class="form-control" v-model="oldPass" />
+            <small v-if="oldPass === ''" class="text-danger"
+              >Please enter old password</small
+            >
           </div>
           <div class="form-group">
             <label>New password</label>
             <input type="password" class="form-control" v-model="newPass" />
+            <small v-if="newPass === ''" class="text-danger"
+              >Please enter new password</small
+            >
           </div>
           <div class="form-group">
             <label>Re-enter password</label>
-            <input type="password" class="form-control" v-model="reNewPass" />
+            <input
+              type="password"
+              class="form-control"
+              v-model="reNewPass"
+              @input="checkReNewPassword"
+            />
+            <small v-if="passwordDoNotMatch" class="text-danger"
+              >Password Do Not Match</small
+            >
           </div>
 
-          <div class="form-group">
-            <label>Address</label>
-            <input
-              type="text"
-              class="form-control"
-              v-model="address"
-              required
-              :disabled="!isEdit"
-            />
-          </div>
+          <button type="button" class="btn btn-primary" @click="handleBack">
+            Back
+          </button>
           <button
-            v-if="!isEdit"
             type="button"
             class="btn btn-primary"
             @click="handleChangePassword"
+            :disabled="passwordDoNotMatch"
           >
             Save change password
           </button>
@@ -49,18 +56,59 @@
 </template>
 
 <script>
+import axios from "axios";
+import Swal from "sweetalert2";
 export default {
   data() {
     return {
-      oldPass: "",
-      newPass: "",
-      reNewPass: "",
+      oldPass: null,
+      newPass: null,
+      reNewPass: null,
+      passwordDoNotMatch: false,
     };
   },
   methods: {
     handleChangePassword() {
-      // if(this.oldPass)
+      if (this.oldPass !== null && this.newPass !== null) {
+        const form = new FormData();
+        form.append("oldPass", this.oldPass);
+        form.append("newPass", this.newPass);
+        axios
+          .post(`${this.$store.state.baseURL}api/v1/changepassword`, form, {
+            headers: {
+              Authorization: `Bearer ${this.$store.state.token}`,
+            },
+          })
+          .then(() => {
+            Swal.fire({
+              text: "Change password successfully!",
+              icon: "success",
+              allowOutsideClick: true,
+            });
+            this.$router.go(-1);
+          })
+          .catch(() => {
+            Swal.fire({
+              text: "Incorrect old password",
+              icon: "error",
+              allowOutsideClick: true,
+            });
+          });
+      } else {
+        window.alert("Please fill out all fields");
+      }
     },
+    checkReNewPassword() {
+      this.passwordDoNotMatch = this.newPass !== this.reNewPass;
+    },
+    handleBack() {
+      this.$router.go(-1);
+    },
+  },
+  mounted() {
+    if (!localStorage.getItem("token")) {
+      this.$router.push({ name: "Signin" });
+    }
   },
 };
 </script>
