@@ -95,9 +95,10 @@ export default {
       if (this.otp === "") {
         this.isFilled1 = false;
       } else {
-        console.log("username in forgotpassword: ", this.username);
         axios
-          .get(`${this.$store.state.baseURL}api/v1/verify?otp=${this.otp}`)
+          .get(
+            `${this.$store.state.baseURL}api/v1/verify?otp=${this.otp}?username=${this.username}`
+          )
           .then((res) => {
             window.alert(res.data.message);
             this.$router.push({ name: "CreateNewPass" });
