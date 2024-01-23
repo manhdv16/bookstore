@@ -95,6 +95,7 @@ export default {
       if (this.otp === "") {
         this.isFilled1 = false;
       } else {
+        console.log("username in forgotpassword: ", this.username);
         axios
           .get(`${this.$store.state.baseURL}api/v1/verify?otp=${this.otp}`)
           .then((res) => {
