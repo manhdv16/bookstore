@@ -56,7 +56,6 @@
 <script>
 import BookBox from "@/components/Book/BookBox";
 import CategoryBox from "@/components/Category/CategoryBox";
-import { mapState } from "vuex";
 export default {
   name: "Home",
   components: { BookBox, CategoryBox },
@@ -66,14 +65,10 @@ export default {
       category_size: 0,
     };
   },
-  computed: {
-    ...mapState(["books"], ["categories"]),
-  },
   mounted() {
     this.categories = this.$store.state.categories;
     this.category_size = this.categories.length;
     this.category_size = Math.min(3, this.category_size);
-
     this.books = this.$store.state.books;
     this.book_size = this.books.length;
     this.book_size = Math.min(6, this.book_size);

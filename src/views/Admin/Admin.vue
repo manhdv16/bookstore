@@ -32,7 +32,7 @@ export default {
       !listRoles.includes("ROLE_ADMIN") &&
       !listRoles.includes("ROLE_MANAGER")
     ) {
-      next({ name: "Home" });
+      next({ name: "Home", replace: true });
     }
   },
 };

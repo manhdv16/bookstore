@@ -9,7 +9,7 @@
 <script>
 import axios from "axios";
 import Nav from "./components/Nav.vue";
-
+// import { mapState } from "vuex";
 export default {
   name: "App",
   components: {
@@ -17,8 +17,8 @@ export default {
   },
   data() {
     return {
-      // baseURL: "https://bebookstore-production.up.railway.app/",
-      baseURL: "http://localhost:8088/",
+      baseURL: "https://bebookstore-production.up.railway.app/",
+      // baseURL: "http://localhost:8088/",
       books: null,
       categories: null,
     };
@@ -31,11 +31,10 @@ export default {
           this.books = res.data.sort((a, b) => {
             return b.sold - a.sold;
           });
-          console.log("books app: ", this.books);
           this.$store.commit("setBooks", this.books);
         })
-        .catch((err) => {
-          console.log("get book error", err);
+        .catch(() => {
+          console.log("get book error");
         });
 
       axios
@@ -44,8 +43,8 @@ export default {
           this.categories = res.data;
           this.$store.commit("setCategories", res.data);
         })
-        .catch((err) => {
-          console.log("get category error", err);
+        .catch(() => {
+          console.log("get category error");
         });
     },
   },

@@ -65,6 +65,7 @@ const routes = [
     path: "/admin",
     name: "Admin",
     component: Admin,
+    meta: { requiresAdmin: true },
   },
   //Book routes
   {
@@ -149,7 +150,6 @@ const routes = [
     component: Review,
   },
 ];
-
 const router = createRouter({
   history: createWebHistory(),
   routes,
