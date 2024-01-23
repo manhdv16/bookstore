@@ -65,7 +65,6 @@ const routes = [
     path: "/admin",
     name: "Admin",
     component: Admin,
-    meta: { requiresAdmin: true },
   },
   //Book routes
   {
