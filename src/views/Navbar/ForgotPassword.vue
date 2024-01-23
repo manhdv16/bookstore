@@ -101,7 +101,10 @@ export default {
           )
           .then((res) => {
             window.alert(res.data.message);
-            this.$router.push({ name: "CreateNewPass" });
+            this.$router.push({
+              name: "CreateNewPass",
+              query: { username: this.username },
+            });
           })
           .catch((err) => {
             alert(err.response.data.message);

@@ -52,6 +52,7 @@ import Swal from "sweetalert2";
 export default {
   data() {
     return {
+      username: "",
       newPass: "",
       reNewPass: "",
       isSubmit: false,
@@ -72,6 +73,7 @@ export default {
       } else {
         const form = new FormData();
         form.append("newPass", this.newPass);
+        form.append("username", this.username);
         axios
           .put(`${this.$store.state.baseURL}api/v1/setpassword`, form)
           .then((res) => {
@@ -97,6 +99,9 @@ export default {
     } else {
       next({ name: "Signin" });
     }
+  },
+  mounted() {
+    this.username = this.$route.query.username;
   },
 };
 </script>
