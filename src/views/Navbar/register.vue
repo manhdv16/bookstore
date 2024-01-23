@@ -104,7 +104,13 @@ export default {
   },
   methods: {
     handleRegister() {
-      if (this.username === "") {
+      if (
+        this.username === "" ||
+        this.email === "" ||
+        this.password === "" ||
+        this.address === "" ||
+        this.phoneNumber === ""
+      ) {
         this.isFilled = false;
         return;
       }
