@@ -33,6 +33,8 @@ export default {
       !listRoles.includes("ROLE_MANAGER")
     ) {
       next({ name: "Home", replace: true });
+    } else {
+      next();
     }
   },
 };
