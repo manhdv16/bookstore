@@ -28,18 +28,29 @@
 </template>
 
 <script>
+import axios from "axios";
 import CategoryBox from "../../components/Category/CategoryBox";
 export default {
   name: "Category",
   components: { CategoryBox },
+  data() {
+    return {
+      categories: [],
+    };
+  },
   methods: {
     goBack() {
-      this.$router.go(-1);
+      this.$router.push("Home");
     },
-  },
-  computed: {
-    categories() {
-      return this.$store.state.categories;
+    getCategories() {
+      axios
+        .get(`${this.$store.state.baseURL}/api/v1/categories`)
+        .then((res) => {
+          this.categories = res.data;
+        })
+        .catch(() => {
+          console.log("err");
+        });
     },
   },
   mounted() {
@@ -55,6 +66,7 @@ export default {
         this.$router.replace({ name: "Home" });
       }
     }
+    this.getCategories();
   },
 };
 </script>

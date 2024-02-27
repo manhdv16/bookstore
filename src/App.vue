@@ -9,7 +9,6 @@
 <script>
 import axios from "axios";
 import Nav from "./components/Nav.vue";
-// import { mapState } from "vuex";
 export default {
   name: "App",
   components: {
@@ -24,32 +23,23 @@ export default {
     };
   },
   methods: {
-    fetchData() {
-      axios
-        .get(`${this.baseURL}api/v1/books`)
+    async viewHome() {
+      await axios
+        .get(`${this.baseURL}api/v1/view-home`)
         .then((res) => {
-          this.books = res.data.sort((a, b) => {
-            return b.sold - a.sold;
-          });
-          this.$store.commit("setBooks", this.books);
+          this.categories = res.data.categories;
+          this.books = res.data.books;
         })
         .catch(() => {
-          console.log("get book error");
-        });
-
-      axios
-        .get(`${this.baseURL}api/v1/categories`)
-        .then((res) => {
-          this.categories = res.data;
-          this.$store.commit("setCategories", res.data);
-        })
-        .catch(() => {
-          console.log("get category error");
+          console.log("err");
         });
     },
   },
   mounted() {
-    this.fetchData();
+    this.$store.commit("setBaseURL", {
+      baseURL: this.baseURL,
+    });
+    this.viewHome();
   },
 };
 </script>

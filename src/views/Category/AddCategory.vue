@@ -75,7 +75,6 @@ export default {
           },
         })
         .then(() => {
-          this.$store.dispatch("fetchData");
           this.$router.push({ name: "AdminCategory" });
           Swal.fire({
             text: "Category Added Successfully!",
@@ -83,7 +82,7 @@ export default {
             allowOutsideClick: false,
           });
         })
-        .catch((err) => console.log(err));
+        .catch(() => console.log("err"));
     },
     handleCancel() {
       this.$router.go(-1);
@@ -94,11 +93,15 @@ export default {
     listRoles = localStorage.getItem("listRoles");
     if (listRoles === null) {
       next({ name: "Signin" });
-    } else if (
-      !listRoles.includes("ROLE_ADMIN") &&
-      !listRoles.includes("ROLE_MANAGER")
-    ) {
-      next({ name: "Home" });
+    } else {
+      if (
+        !listRoles.includes("ROLE_ADMIN") &&
+        !listRoles.includes("ROLE_MANAGER")
+      ) {
+        next({ name: "Home" });
+      } else {
+        next();
+      }
     }
   },
   mounted() {

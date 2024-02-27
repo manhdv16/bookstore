@@ -39,7 +39,6 @@ export default {
         axios
           .delete(`${this.$store.state.baseURL}api/v1/deleteCategory/${id}`)
           .then((res) => {
-            this.$store.dispatch("fetchData");
             console.log(res.status);
           })
           .catch((err) => console.log("delete error", err));

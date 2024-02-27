@@ -75,6 +75,9 @@
           :key="index"
           class="review-container mb-4"
         >
+          <div class="mb-2">
+            <strong>{{ review.cmtDate }}</strong>
+          </div>
           <div class="user-info mb-2">
             <strong>{{ review.user.userName }}</strong>
           </div>
@@ -103,15 +106,26 @@ export default {
   data() {
     return {
       book: {},
-      categoryName: null,
       id: null,
       token: null,
       isAddedToWishlist: false,
       quantity: 1,
-      reviews: null,
+      reviews: [],
     };
   },
   methods: {
+    getBook(id) {
+      axios
+        .get(`${this.$store.getters.baseURL}api/v1/book/${id}`)
+        .then((res) => {
+          this.book = res.data.book;
+          this.reviews = res.data.listCmt;
+          console.log(this.reviews);
+        })
+        .catch(() => {
+          console.log("err");
+        });
+    },
     addToCart(bookId) {
       if (!this.token) {
         this.$router.push({ name: "Signin" });
@@ -153,24 +167,11 @@ export default {
           });
       }
     },
-    listComments(id) {
-      axios
-        .get(`${this.$store.state.baseURL}api/v1/searchCommentByBook/${id}`)
-        .then((res) => {
-          this.reviews = res.data;
-        })
-        .catch(() => {
-          console.log("get list comments error");
-        });
-    },
   },
   mounted() {
     this.id = this.$route.params.id;
-    this.books = this.$store.state.books;
-    this.book = this.books.find((book) => book.bookId == this.id);
-    this.categoryName = this.book.category.categoryName;
+    this.getBook(this.id);
     this.token = localStorage.getItem("token");
-    this.listComments(this.id);
   },
 };
 </script>

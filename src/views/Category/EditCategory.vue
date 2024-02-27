@@ -75,7 +75,6 @@ export default {
         )
         .then((res) => {
           console.log(res.status);
-          this.$store.dispatch("fetchData");
           this.$router.push({ name: "AdminCategory" });
           Swal.fire({
             text: "Category update successfully",
@@ -99,11 +98,13 @@ export default {
     listRoles = localStorage.getItem("listRoles");
     if (listRoles === null) {
       next({ name: "Signin" });
-    } else if (
-      !listRoles.includes("ROLE_ADMIN") &&
-      !listRoles.includes("ROLE_MANAGER")
-    ) {
-      next({ name: "Home" });
+    } else {
+      if (
+        !listRoles.includes("ROLE_ADMIN") &&
+        !listRoles.includes("ROLE_MANAGER")
+      ) {
+        next({ name: "Home" });
+      } else next();
     }
   },
   mounted() {

@@ -56,6 +56,7 @@
 <script>
 import BookBox from "@/components/Book/BookBox";
 import CategoryBox from "@/components/Category/CategoryBox";
+import axios from "axios";
 export default {
   name: "Home",
   components: { BookBox, CategoryBox },
@@ -63,15 +64,30 @@ export default {
     return {
       book_size: 0,
       category_size: 0,
+      books: [],
+      categories: [],
     };
   },
+  methods: {
+    async viewHome() {
+      await axios
+        .get(`${this.$store.state.baseURL}api/v1/view-home`)
+        .then((res) => {
+          this.categories = res.data.categories;
+          this.category_size = Math.min(3, res.data.categories.length);
+          this.books = res.data.books;
+          this.book_size = this.books.length;
+          this.$store.commit("setCategories", {
+            categories: res.data.categories,
+          });
+        })
+        .catch(() => {
+          console.log("err");
+        });
+    },
+  },
   mounted() {
-    this.categories = this.$store.state.categories;
-    this.category_size = this.categories.length;
-    this.category_size = Math.min(3, this.category_size);
-    this.books = this.$store.state.books;
-    this.book_size = this.books.length;
-    this.book_size = Math.min(6, this.book_size);
+    this.viewHome();
   },
 };
 </script>

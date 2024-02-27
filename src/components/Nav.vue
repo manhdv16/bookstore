@@ -178,11 +178,11 @@ export default {
       let listRoles = [];
       listRoles = this.$store.state.roles || localStorage.getItem("listRoles");
       console.log("listRoles: ", listRoles);
-      if (listRoles !== undefined)
+      if (listRoles !== null) {
         return (
           listRoles.includes("ROLE_ADMIN") || listRoles.includes("ROLE_MANAGER")
         );
-      return false;
+      } else return false;
     },
   },
   mounted() {

@@ -114,6 +114,7 @@ export default {
     return {
       token: null,
       totalcost: 0,
+      cartItems: [],
     };
   },
   name: "Cart",
@@ -127,8 +128,7 @@ export default {
         })
         .then((res) => {
           console.log("result cart : ", res.data);
-          this.$store.commit("setCartItems", res.data);
-          // this.cartItems = res.data;
+          this.cartItems = res.data;
         })
         .catch((err) => {
           console.log("get cart error: ", err);
@@ -147,8 +147,6 @@ export default {
           },
         })
         .then(() => {
-          // this.cartItems = null;
-          this.$store.commit("setCartItems", "null");
           Swal.fire({
             text: "You ordered successfully !",
             icon: "success",
@@ -168,7 +166,6 @@ export default {
           },
         })
         .then(() => {
-          this.$store.commit("delItemCart", bookId);
           console.log("delete item success");
         })
         .catch(() => {
@@ -192,9 +189,6 @@ export default {
         );
       }
       return 0;
-    },
-    cartItems() {
-      return this.$store.state.cartItems;
     },
   },
 };

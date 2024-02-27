@@ -75,10 +75,10 @@ export default {
             },
           })
           .then(() => {
-            this.$store.dispatch("fetchData");
+            // delete k reload, category nửa
           })
-          .catch((err) => {
-            console.log("err when delete book", err);
+          .catch(() => {
+            console.log("err when delete book");
           });
       }
     },

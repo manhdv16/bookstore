@@ -95,10 +95,10 @@
 <script>
 import axios from "axios";
 import Swal from "sweetalert2";
-import { mapState } from "vuex";
 export default {
   data() {
     return {
+      categories: [],
       categoryId: null,
       bookName: null,
       author: null,
@@ -136,7 +136,6 @@ export default {
       axios
         .post(`${this.$store.state.baseURL}api/v1/addBook`, formData, config)
         .then(() => {
-          this.$store.dispatch("fetchData");
           this.$router.push({ name: "AdminBook" });
           Swal.fire({
             text: "Book Added Successfully!",
@@ -149,20 +148,32 @@ export default {
     cancelAdd() {
       this.$router.go(-1);
     },
-  },
-  computed: {
-    ...mapState(["categories"]),
+    getCategories() {
+      axios
+        .get(`${this.$store.getters.baseURL}api/v1/categories`)
+        .then((res) => {
+          this.categories = res.data;
+        })
+        .catch(() => {
+          console.log("err");
+        });
+    },
   },
   beforeRouteEnter(to, from, next) {
     let listRoles = [];
     listRoles = localStorage.getItem("listRoles");
+    console.log("listRole:", listRoles);
     if (listRoles === null) {
       next({ name: "Signin" });
-    } else if (
-      !listRoles.includes("ROLE_ADMIN") &&
-      !listRoles.includes("ROLE_MANAGER")
-    ) {
-      next({ name: "Home" });
+    } else {
+      if (
+        !listRoles.includes("ROLE_ADMIN") &&
+        !listRoles.includes("ROLE_MANAGER")
+      ) {
+        next({ name: "Home" });
+      } else {
+        next();
+      }
     }
   },
   mounted() {
@@ -170,6 +181,7 @@ export default {
       this.$router.push({ name: "Signin" });
     }
     this.token = localStorage.getItem("token");
+    this.getCategories();
   },
 };
 </script>

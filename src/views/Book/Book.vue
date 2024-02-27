@@ -17,7 +17,7 @@
     </div>
     <div class="row">
       <div
-        v-for="book of paginatedBooks"
+        v-for="book of books"
         :key="book.bookId"
         class="col-md-6 col-xl-4 col-12 pt-3 justify-content-around d-flex"
       >
@@ -39,7 +39,8 @@
 </template>
 
 <script>
-import { mapState } from "vuex";
+import axios from "axios";
+// import { mapState } from "vuex";
 import BookBox from "../../components/Book/BookBox";
 export default {
   name: "Book",
@@ -47,7 +48,8 @@ export default {
   data() {
     return {
       currentPage: 1,
-      pageSize: 9,
+      totalPages: 0,
+      books: [],
     };
   },
   methods: {
@@ -57,24 +59,28 @@ export default {
     prevPage() {
       if (this.currentPage > 1) {
         this.currentPage -= 1;
+        this.getPagging(this.currentPage);
       }
     },
     nextPage() {
       if (this.currentPage < this.totalPages) {
         this.currentPage += 1;
+        this.getPagging(this.currentPage);
       }
     },
-  },
-  computed: {
-    ...mapState(["books"]),
-    totalPages() {
-      console.log(this.books.length);
-      return Math.ceil(this.books.length / this.pageSize);
-    },
-    paginatedBooks() {
-      const startIndex = (this.currentPage - 1) * this.pageSize;
-      const endIndex = startIndex + this.pageSize;
-      return this.books.slice(startIndex, endIndex);
+    async getPagging(page) {
+      page = page - 1;
+      console.log(page);
+      await axios
+        .get(`${this.$store.state.baseURL}api/v1/pagging?page=${page}`)
+        .then((res) => {
+          this.totalPages = res.data.totalPages;
+          this.books = res.data.books;
+          console.log(this.books);
+        })
+        .catch(() => {
+          console.log("err");
+        });
     },
   },
   mounted() {
@@ -90,6 +96,7 @@ export default {
         this.$router.replace({ name: "Home" });
       }
     }
+    this.getPagging(1);
   },
 };
 </script>

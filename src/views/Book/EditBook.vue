@@ -99,7 +99,6 @@
 <script>
 import axios from "axios";
 import Swal from "sweetalert2";
-import { mapState } from "vuex";
 export default {
   data() {
     return {
@@ -113,6 +112,7 @@ export default {
       price: null,
       quantity: null,
       token: null,
+      categories: [],
     };
   },
   methods: {
@@ -152,7 +152,6 @@ export default {
           config
         )
         .then(() => {
-          this.$store.dispatch("fetchData");
           this.$router.push({ name: "AdminBook" });
           Swal.fire({
             text: "Book Updated Successfully!",
@@ -165,36 +164,46 @@ export default {
     cancelEdit() {
       this.$router.go(-1);
     },
-  },
-  computed: {
-    ...mapState(["categories"]),
-    ...mapState(["books"]),
+    getBook(id) {
+      axios
+        .get(`${this.$store.getters.baseURL}api/v1/book/${id}`)
+        .then((res) => {
+          this.book = res.data.book;
+          this.categoryId = this.book.category.categoryId;
+          this.bookName = this.book.bookName;
+          this.author = this.book.author;
+          this.description = this.book.description;
+          this.image = this.book.image;
+          this.imagePreview = this.book.image;
+          this.price = this.book.price;
+          this.quantity = this.book.quantity;
+        })
+        .catch(() => {
+          console.log("err");
+        });
+    },
   },
   beforeRouteEnter(to, from, next) {
     let listRoles = [];
     listRoles = localStorage.getItem("listRoles");
     if (listRoles === null) {
       next({ name: "Signin" });
-    } else if (
-      !listRoles.includes("ROLE_ADMIN") &&
-      !listRoles.includes("ROLE_MANAGER")
-    ) {
-      next({ name: "Home" });
+    } else {
+      if (
+        !listRoles.includes("ROLE_ADMIN") &&
+        !listRoles.includes("ROLE_MANAGER")
+      ) {
+        next({ name: "Home" });
+      } else {
+        next();
+      }
     }
   },
   mounted() {
     this.id = this.$route.params.id;
-    this.book = this.books.find((book) => book.bookId == this.id);
-
-    this.categoryId = this.book.category.categoryId;
-    this.bookName = this.book.bookName;
-    this.author = this.book.author;
-    this.description = this.book.description;
-    this.image = this.book.image;
-    this.imagePreview = this.book.image;
-    this.price = this.book.price;
-    this.quantity = this.book.quantity;
+    this.getBook(this.id);
     this.token = localStorage.getItem("token");
+    this.categories = this.$store.state.categories;
   },
 };
 </script>

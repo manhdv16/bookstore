@@ -10,8 +10,8 @@
     </div>
 
     <div
-      v-for="order in paginatedOrders"
-      :key="order.id"
+      v-for="order in orders"
+      :key="order.orderId"
       class="row mt-2 pt-3 justify-content-around"
     >
       <div class="col-md-3 embed-responsive embed-responsive-16by9">
@@ -27,7 +27,7 @@
             <router-link
               :to="{
                 name: 'OrderDetails',
-                params: { id: order.id },
+                params: { id: order.orderId },
                 query: { totalCostOrder: order.totalCost },
               }"
               >View Order Detail</router-link
@@ -39,13 +39,18 @@
           </p>
           <p id="item-price" class="mb-0 font-weight-bold">
             Total Cost :
-            <span class="mb-0 font-weight-normal">{{
-              order.totalCost.toLocaleString("vi-VN", {
-                style: "currency",
-                currency: "VND",
-              })
-            }}</span>
+            <span class="mb-0 font-weight-normal">
+              {{
+                order && order.totalCost
+                  ? order.totalCost.toLocaleString("vi-VN", {
+                      style: "currency",
+                      currency: "VND",
+                    })
+                  : ""
+              }}
+            </span>
           </p>
+
           <p class="mb-0 font-weight-bold">
             Ordered on:
             <span class="mb-0 font-weight-normal">{{ order.orderDate }}</span>
@@ -81,13 +86,16 @@
           <div class="col-md-6">
             <button
               class="btn btn-success mt-4"
-              @click="setStatus(order.id, order.status)"
+              @click="setStatus(order.orderId, order.status)"
             >
               Save
             </button>
           </div>
           <div class="col-md-6">
-            <button class="btn btn-danger mt-4" @click="deleteOrder(order.id)">
+            <button
+              class="btn btn-danger mt-4"
+              @click="deleteOrder(order.orderId)"
+            >
               Delete
             </button>
           </div>
@@ -111,65 +119,49 @@
 
 <script>
 import Swal from "sweetalert2";
-import { mapState } from "vuex";
 const axios = require("axios");
 export default {
   data() {
     return {
       token: null,
-      orderList: [],
+      orders: [],
       currentPage: 1,
-      pageSize: 3,
+      totalPages: 0,
     };
   },
   name: "Order",
-  computed: {
-    ...mapState(["listOrders"]),
-    totalPages() {
-      return Math.ceil(this.$store.state.listOrders.length / this.pageSize);
-    },
-    paginatedOrders() {
-      const startIndex = (this.currentPage - 1) * this.pageSize;
-      const endIndex = startIndex + this.pageSize;
-      return this.$store.state.listOrders.slice(startIndex, endIndex);
-    },
-  },
   methods: {
     goBack() {
       this.$router.go(-1);
     },
     prevPage() {
-      if (this.currentPage > 1) return (this.currentPage -= 1);
+      if (this.currentPage > 1) {
+        this.currentPage -= 1;
+        this.getPagging(this.currentPage);
+      }
     },
     nextPage() {
-      if (this.currentPage < this.totalPages) this.currentPage += 1;
+      if (this.currentPage < this.totalPages) {
+        this.currentPage += 1;
+        this.getPagging(this.currentPage);
+      }
     },
     // list of order histories
-    getListOrders() {
+    getPagging(page) {
+      page = page - 1;
       axios
-        .get(`${this.$store.state.baseURL}api/v1/adminOrder`, {
+        .get(`${this.$store.state.baseURL}api/v1/page-order?page=${page}`, {
           headers: {
             Authorization: `Bearer ${this.token}`,
           },
         })
         .then((res) => {
-          this.orders = res.data;
-          // for each order populate orderList
-          this.orderList = this.orders.map((order) => ({
-            id: order.orderId,
-            userName: order.user.userName,
-            address: order.user.address,
-            phoneNumber: order.user.phoneNumber,
-            totalCost: order.totalAmount,
-            orderDate: order.orderDate.substring(0, 10),
-            image: order.image,
-            totalBook: order.totalBook,
-            status: order.status,
-          }));
-          this.orderList = this.orderList.sort((a, b) => {
+          this.orders = res.data.orders;
+          this.totalPages = res.data.totalPages;
+          this.orders = this.orders.sort((a, b) => {
             return new Date(b.orderDate) - new Date(a.orderDate);
           });
-          this.$store.commit("setListOrders", this.orderList);
+          console.log("orders: ", this.orders);
         })
         .catch(() => {
           console.log("get list error");
@@ -221,7 +213,7 @@ export default {
     const roles = this.$store.state.roles;
     console.log(roles);
     this.token = localStorage.getItem("token");
-    this.getListOrders();
+    this.getPagging(1);
   },
 };
 </script>
