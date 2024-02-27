@@ -44,7 +44,7 @@ export default {
     },
     getCategories() {
       axios
-        .get(`${this.$store.state.baseURL}/api/v1/categories`)
+        .get(`${this.$store.state.baseURL}api/v1/categories`)
         .then((res) => {
           this.categories = res.data;
         })
