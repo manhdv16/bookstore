@@ -14,7 +14,6 @@
               id="username"
               name="username"
               placeholder="Enter Username"
-              required
               autocomplete="current-username"
             />
             <small v-if="!isFilled && username === ''" class="text-danger"
@@ -31,7 +30,6 @@
               class="form-control"
               name="password"
               placeholder="Enter password"
-              required
               autocomplete="current-password"
             />
             <small v-if="!isFilled && password === ''" class="text-danger"
@@ -51,6 +49,11 @@
             </button>
           </div>
           <div class="center-container">
+            <button class="btn btn-google" @click="signInWithGoogle">
+              Login with Google
+            </button>
+          </div>
+          <div class="center-container">
             <router-link :to="{ name: 'ForgotPassword' }"
               >Forgot Password</router-link
             >
@@ -63,6 +66,7 @@
 
 <script>
 import axios from "axios";
+import { googleTokenLogin } from "vue3-google-login";
 export default {
   data() {
     return {
@@ -87,7 +91,6 @@ export default {
       axios
         .post(`${this.$store.state.baseURL}api/v1/signin`, userData)
         .then((res) => {
-          console.log("userForm: ", res.data);
           this.$store.commit("setToken", {
             token: res.data.token,
             listRoles: res.data.listRoles,
@@ -96,6 +99,44 @@ export default {
         })
         .catch(() => {
           alert("Username or password is incorrect");
+        });
+    },
+    signInWithGoogle() {
+      googleTokenLogin()
+        .then((res) => {
+          axios
+            .get(
+              "https://www.googleapis.com/oauth2/v1/userinfo?alt=json&access_token=" +
+                res.access_token
+            )
+            .then((response) => {
+              const form = {
+                userName: response.data.name,
+                email: response.data.email,
+              };
+              // form.append("email", response.data.email);
+              // form.append("userName", response.data.name);
+              console.log("User info: ", response.data);
+              axios
+                .post(
+                  `${this.$store.state.baseURL}api/v1/login-by-google`,
+                  form
+                )
+                .then((res) => {
+                  console.log("res server: ", res.data);
+                  this.$store.commit("setToken", {
+                    token: res.data.token,
+                    listRoles: res.data.listRoles,
+                  });
+                  this.$router.push({ name: "Home" });
+                });
+            })
+            .catch((error) => {
+              console.log("Error", error);
+            });
+        })
+        .catch((error) => {
+          console.log("Error getting user info: ", error);
         });
     },
   },
@@ -107,7 +148,10 @@ export default {
   margin-top: 5rem;
 }
 .center-container {
-  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 10px 0;
 }
 .login-container {
   border: 1px solid darkgrey;
@@ -131,17 +175,27 @@ export default {
   display: block;
   margin-bottom: 5px;
 }
-
 .btn {
-  margin-top: 10px;
-  margin-right: 1rem;
+  padding: 10px 20px;
+  margin: 5px;
+  border: none;
+  cursor: pointer;
+  border-radius: 5px;
 }
 
 .btn-primary {
-  background-color: blue;
-  color: white;
+  background-color: #0664a3;
+  color: #ffffff;
 }
 
+.btn-google {
+  background-color: #dd4b39;
+  color: #ffffff;
+}
+
+.router-link-exact-active {
+  font-weight: bold;
+}
 .float-left {
   float: left;
   clear: left;

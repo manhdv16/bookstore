@@ -40,4 +40,13 @@ const store = new Vuex.Store({
 const app = createApp(App);
 app.use(Vuex);
 app.use(store);
+
+import vue3GoogleLogin from "vue3-google-login";
+app.use(vue3GoogleLogin, {
+  clientId:
+    "18737496113-92c4s9a8ldr4q2q7ece5g80e4ve17ek8.apps.googleusercontent.com",
+  scope: "openid profile email",
+  prompt: "select_account",
+});
+
 app.use(router).mount("#app");
