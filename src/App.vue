@@ -16,8 +16,8 @@ export default {
   },
   data() {
     return {
-      // baseURL: "https://bebookstore-production.up.railway.app/",
-      baseURL: "http://localhost:8088/",
+      baseURL: "https://bebookstore-production.up.railway.app/",
+      // baseURL: "http://localhost:8088/",
       books: null,
       categories: null,
     };
